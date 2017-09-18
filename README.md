@@ -1,6 +1,6 @@
 # Introduction
 
-This Makefile will help you create raspbian-lite SD cards on Mac OSX. You might get it to work on Linux as well, but I have not put any thought into making it work across the borders.
+This Makefile will help you create raspbian-lite SD cards on Mac OSX. You might get it to work on Linux as well, but I have not put any thought into making it work across the borders. This Makefile supports creating /boot/ssh and /boot/wpa_supplicant.conf automatically, see below.
 
 * jessie - for projects that are not yet ready for the latest and greatest release
 * stretch - currently the latest release

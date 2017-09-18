@@ -8,7 +8,7 @@ This Makefile will help you create raspbian-lite SD cards on Mac OSX. You might 
 ## Installation
 
 ```
-git clone https://github.com/maglub/raspiMake
+git clone https://github.com/maglub/raspiMake.git
 ```
 
 ## Usage

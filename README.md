@@ -5,7 +5,13 @@ This Makefile will help you create raspbian-lite SD cards on Mac OSX. You might 
 * jessie - for projects that are not yet ready for the latest and greatest release
 * stretch - currently the latest release
 
-Usage:
+## Installation
+
+```
+git clone https://github.com/maglub/raspiMake
+```
+
+## Usage
 
 ```
 #--- make without any options will list connected SD cards (and other disks)

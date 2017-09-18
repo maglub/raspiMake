@@ -5,6 +5,10 @@ This Makefile will help you create raspbian-lite SD cards on Mac OSX. You might 
 * jessie - for projects that are not yet ready for the latest and greatest release
 * stretch - currently the latest release
 
+Note!!!
+
+If you write something to the wrong /dev/rdisk device, you _will_ hurt something. Badly. Only do this if you are sure that the /dev/rdisk device (DISK=X) you choose is really the SD card you aim to write to. I once destroyed a friend's TimeMachine backups this way. Luckily, we are still on speaking terms.
+
 ## Installation
 
 ```

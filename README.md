@@ -19,6 +19,18 @@ make stretch DISK=X
 
 make will download and unpack the necessary image, and write it to the selected /dev/rdisk device.
 
+## Pre requisites
+
+* pv
+
+```
+brew install pv
+```
+
+# Examples
+
+I recommend that you create both a ./wpa_supplicant.conf file and a ./ssh file, so that you start your raspberry pi with a working wifi connection and ssh enabled. This, of course, have some security implications. Don't leave your raspberry pi like that without changing the password for the "pi" user, and do not connect it directly to the internet.
+
 ## SSH
 
 If you want ssh to be enabled at boot, touch ./ssh and run make.
@@ -50,6 +62,53 @@ EOT
 
 make stretch DISK=X
 ```
+
+## Simple demo
+
+```
+$ make
+diskutil list
+...
+/dev/disk2 (internal, physical):
+   #:                       TYPE NAME                    SIZE       IDENTIFIER
+   0:     FDisk_partition_scheme                        *16.1 GB    disk2
+   1:             Windows_FAT_32 boot                    43.8 MB    disk2s1
+   2:                      Linux                         1.8 GB     disk2s2
+...
+
+$ touch ssh
+$ vi wpa_supplicant.conf
+
+$ make stretch DISK=2
+wget http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-09-08/2017-09-07-raspbian-stretch-lite.zip
+...
+* Extracting 2017-09-07-raspbian-stretch-lite.img from 2017-09-07-raspbian-stretch-lite.zip
+unzip -o 2017-09-07-raspbian-stretch-lite.zip
+Archive:  2017-09-07-raspbian-stretch-lite.zip
+  inflating: 2017-09-07-raspbian-stretch-lite.img  
+ln -sf 2017-09-07-raspbian-stretch-lite.img stretch.img
+DISK: 2
+test -n "2" # $DISK => make jessie/stretch DISK=XXX needed
+diskutil unmountDisk /dev/disk2
+Unmount of all volumes on disk2 was successful
+pv stretch.img | sudo dd of=/dev/rdisk2 bs=1m || true
+1.73GiB 0:02:10 [13.6MiB/s] [==================================================================================================>] 100%            
+0+28299 records in
+0+28299 records out
+1854590976 bytes transferred in 130.476857 secs (14213946 bytes/sec)
+* Sleeping 3 seconds, to allow OSX to find the newly written SD card again
+* checking for ssh file
+* checking for wpa_supplicant.conf file
+* Looking in /Volumes/boot
+-rwxrwxrwx  1 malu  staff    0 Sep 18 17:36 /Volumes/boot/ssh
+-rwxrwxrwx  1 malu  staff  164 Sep 18 17:36 /Volumes/boot/wpa_supplicant.conf
+* Unmounting and ejecting disk
+diskutil unmountDisk /dev/disk2
+Unmount of all volumes on disk2 was successful
+diskutil eject /dev/disk2
+Disk /dev/disk2 ejected
+```
+
 
 # License
 

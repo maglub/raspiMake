@@ -1,0 +1,6 @@
+.DS_Store
+*.zip
+*.img
+*.gz
+ssh
+wpa_supplicant.conf

@@ -27,6 +27,8 @@ make will download and unpack the necessary image, and write it to the selected 
 brew install pv
 ```
 
+If you don't feel like installing the "pv" command, just replace "pv" with "cat" in the Makefile.
+
 # Examples
 
 I recommend that you create both a ./wpa_supplicant.conf file and a ./ssh file, so that you start your raspberry pi with a working wifi connection and ssh enabled. This, of course, have some security implications. Don't leave your raspberry pi like that without changing the password for the "pi" user, and do not connect it directly to the internet.

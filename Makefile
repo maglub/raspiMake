@@ -14,7 +14,7 @@ STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch-lite.zip
 STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch-lite.img
 STRETCH_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-09-08/$(STRETCH_FILE)
 
-CAT_COMMAND:=$(shell type -p pv2 || echo cat)
+CAT_COMMAND:=$(shell type -p pv || echo cat)
 
 
 #--- default is the first recipe, and will be called with just "make"

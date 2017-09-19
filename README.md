@@ -30,9 +30,9 @@ make stretch DISK=X
 
 make will download and unpack the necessary image, and write it to the selected /dev/rdisk device.
 
-## Pre requisites
+## Pre requisites/Dependencies
 
-* pv
+* pv - optional, but will prettify the output and give you an indication on the write speed of dd
 
 ```
 brew install pv

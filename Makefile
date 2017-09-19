@@ -12,6 +12,9 @@ STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch-lite.zip
 STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch-lite.img
 STRETCH_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-09-08/$(STRETCH_FILE)
 
+CAT_COMMAND:=$(shell type -p pv2 || echo cat)
+
+
 #--- default is the first recipe, and will be called with just "make"
 default: diskutilList help
 
@@ -60,7 +63,7 @@ $(STRETCH_SYMLINK): $(STRETCH_IMAGE)
 
 ddStretch: diskSet
 	diskutil unmountDisk /dev/disk$(DISK)
-	pv $(STRETCH_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+	$(CAT_COMMAND) $(STRETCH_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
 stretch: $(STRETCH_SYMLINK) ddStretch copyFiles
 
@@ -81,7 +84,7 @@ $(JESSIE_SYMLINK): $(JESSIE_IMAGE)
 
 ddJessie: diskSet
 	diskutil unmountDisk /dev/disk$(DISK)
-	pv $(JESSIE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+	$(CAT_COMMAND) $(JESSIE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
 jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 

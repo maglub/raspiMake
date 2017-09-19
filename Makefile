@@ -49,6 +49,22 @@ diskSet:
 	@echo "DISK: $(DISK)"
 	test -n "$(DISK)" # $$DISK => make jessie/stretch DISK=XXX needed
 
+unmountDisk:
+	diskutil unmountDisk /dev/disk$(DISK)
+
+copyFiles:
+	@echo "* Sleeping 3 seconds, to allow OSX to find the newly written SD card again"
+	@sleep 3
+	@echo "* checking for ssh file"
+	@if [ -a ssh ] ; then touch /Volumes/boot/ssh ; fi ;
+	@echo "* checking for wpa_supplicant.conf file"
+	@if [ -a wpa_supplicant.conf ]; then cp wpa_supplicant.conf /Volumes/boot ; fi;
+	@echo "* Looking in /Volumes/boot"
+	@ls -la /Volumes/boot/ssh /Volumes/boot/wpa_supplicant.conf 2>/dev/null || true
+	@echo "* Unmounting and ejecting disk"
+	diskutil unmountDisk /dev/disk$(DISK)
+	diskutil eject /dev/disk$(DISK)
+
 #===================================
 # STRETCH
 #===================================
@@ -63,11 +79,9 @@ $(STRETCH_IMAGE): $(STRETCH_FILE)
 $(STRETCH_SYMLINK): $(STRETCH_IMAGE)
 	ln -sf $(STRETCH_IMAGE) $(STRETCH_SYMLINK)
 
-ddStretch: diskSet
-	diskutil unmountDisk /dev/disk$(DISK)
+ddStretch: diskSet unmountDisk
 	$(CAT_COMMAND) $(STRETCH_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
-stretch: $(STRETCH_SYMLINK) ddStretch copyFiles
 
 #===================================
 # JESSIE
@@ -84,29 +98,17 @@ $(JESSIE_SYMLINK): $(JESSIE_IMAGE)
 	@echo "* Creating symlink $(JESSIE_SYMLINK) => $(JESSIE_IMAGE)"
 	ln -sf $(JESSIE_IMAGE) $(JESSIE_SYMLINK)
 
-ddJessie: diskSet
-	diskutil unmountDisk /dev/disk$(DISK)
+ddJessie: diskSet unmountDisk
 	$(CAT_COMMAND) $(JESSIE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
-jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 
 #===================================
 # MAIN 
 #===================================
 
-copyFiles:
-	@echo "* Sleeping 3 seconds, to allow OSX to find the newly written SD card again"
-	@sleep 3
-	@echo "* checking for ssh file"
-	@if [ -a ssh ] ; then touch /Volumes/boot/ssh ; fi ;
-	@echo "* checking for wpa_supplicant.conf file"
-	@if [ -a wpa_supplicant.conf ]; then cp wpa_supplicant.conf /Volumes/boot ; fi;
-	@echo "* Looking in /Volumes/boot"
-	@ls -la /Volumes/boot/ssh /Volumes/boot/wpa_supplicant.conf 2>/dev/null || true
-	@echo "* Unmounting and ejecting disk"
-	diskutil unmountDisk /dev/disk$(DISK)
-	diskutil eject /dev/disk$(DISK)
+stretch: $(STRETCH_SYMLINK) ddStretch copyFiles
 
+jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 
 clean:
 	rm *.img || true

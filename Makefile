@@ -1,11 +1,13 @@
 #--- http://downloads.raspberrypi.org/raspbian_lite/images/
 
+#--- 2017-07-05 is the last release of jessie
 JESSIE_VERSION = 2017-07-05
 JESSIE_SYMLINK = jessie.img
 JESSIE_FILE    = $(JESSIE_VERSION)-raspbian-jessie-lite.zip
 JESSIE_IMAGE   = $(JESSIE_VERSION)-raspbian-jessie-lite.img
 JESSIE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/$(JESSIE_FILE)
 
+#--- This section has to be updated with new releases of stretch
 STRETCH_VERSION = 2017-09-07
 STRETCH_SYMLINK = stretch.img
 STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch-lite.zip

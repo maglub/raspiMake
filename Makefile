@@ -2,17 +2,26 @@
 
 #--- 2017-07-05 is the last release of jessie
 JESSIE_VERSION = 2017-07-05
+JESSIE_RELEASE_DATE = $(JESSIE_VERSION)
 JESSIE_SYMLINK = jessie.img
 JESSIE_FILE    = $(JESSIE_VERSION)-raspbian-jessie-lite.zip
 JESSIE_IMAGE   = $(JESSIE_VERSION)-raspbian-jessie-lite.img
-JESSIE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/$(JESSIE_FILE)
+JESSIE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(JESSIE_RELEASE_DATE)/$(JESSIE_FILE)
 
 #--- This section has to be updated with new releases of stretch
-STRETCH_VERSION = 2017-09-07
+#--- Sadly, the release date is not always the same date as the release version
+STRETCH_VERSION = 2017-11-29
+STRETCH_RELEASE_DATE = 2017-12-01
 STRETCH_SYMLINK = stretch.img
 STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch-lite.zip
 STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch-lite.img
-STRETCH_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-09-08/$(STRETCH_FILE)
+STRETCH_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_RELEASE_DATE)/$(STRETCH_FILE)
+
+#--- This section is for OctoPi (http://octoprint.org/download/)
+OCTOPI_SYMLINK = octopi.img
+OCTOPI_FILE    = octopi.zip
+OCTOPI_IMAGE   = octopi-jessie-lite.img
+OCTOPI_URL     = https://octopi.octoprint.org/latest
 
 CAT_COMMAND:=$(shell type -p pv || echo cat)
 
@@ -34,7 +43,11 @@ help:
 	@echo "#--- X => the disk number you see above"
 	@echo "make jessie DISK=X"
 	@echo "make stretch DISK=X"
+	@echo "make octopi DISK=X"
 	@echo ""
+	@echo "make $(STRETCH_FILE) # download file"
+	@echo "make $(JESSIE_FILE) # download file"
+	@echo "make $(OCTOPI_FILE) # download file"
 
 #--- list disks
 diskutilList:
@@ -64,6 +77,26 @@ copyFiles:
 	@echo "* Unmounting and ejecting disk"
 	diskutil unmountDisk /dev/disk$(DISK)
 	diskutil eject /dev/disk$(DISK)
+
+#===================================
+# OctoPi
+#===================================
+$(OCTOPI_FILE):
+	curl --silent -v $(OCTOPI_URL) 2>&1 | grep Location | awk -F"/" '{print $$NF}' | tr -d '\r' | xargs -L1 -IX wget -O X $(OCTOPI_URL)
+	ls -tr octopi-jessie-lite* | tail -1 | xargs -L1 -IX ln -sf X octopi.zip
+
+$(OCTOPI_IMAGE): $(OCTOPI_FILE)
+	@echo "* Extracting $(OCTOPI_IMAGE) from $(OCTOPI_FILE)"
+	unzip -o $(OCTOPI_FILE)
+	ls -tr *-octopi-*.img | tail -1 | xargs -L1 -IX ln -sf X $(OCTOPI_IMAGE) 
+	@touch $(OCTOPI_IMAGE)
+	
+$(OCTOPI_SYMLINK): $(OCTOPI_IMAGE)
+	ln -sf $(OCTOPI_IMAGE) $(OCTOPI_SYMLINK)
+
+ddOctopi: diskSet unmountDisk
+	$(CAT_COMMAND) $(OCTOPI_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+
 
 #===================================
 # STRETCH
@@ -110,9 +143,12 @@ stretch: $(STRETCH_SYMLINK) ddStretch copyFiles
 
 jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 
+octopi:  $(OCTOPI_SYMLINK) ddOctopi copyFiles
+
 clean:
 	rm *.img || true
 
 distclean: clean
 	rm *jessie*.zip || true
 	rm *stretch*.zip || true
+	rm *octopi*.zip || true

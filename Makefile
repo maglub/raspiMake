@@ -10,12 +10,41 @@ JESSIE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_
 
 #--- This section has to be updated with new releases of stretch
 #--- Sadly, the release date is not always the same date as the release version
-STRETCH_VERSION = 2017-11-29
-STRETCH_RELEASE_DATE = 2017-12-01
+#STRETCH_VERSION = 2017-11-29
+STRETCH_VERSION = 2018-04-18
+#STRETCH_RELEASE_DATE = 2017-12-01
+STRETCH_RELEASE_DATE = 2018-04-19
 STRETCH_SYMLINK = stretch.img
-STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch-lite.zip
-STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch-lite.img
-STRETCH_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_RELEASE_DATE)/$(STRETCH_FILE)
+STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch.zip
+STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch.img
+STRETCH_URL     = http://downloads.raspberrypi.org/raspbian/images/raspbian-$(STRETCH_RELEASE_DATE)/$(STRETCH_FILE)
+
+#--- This section has to be updated with new releases of stretch
+#--- Sadly, the release date is not always the same date as the release version
+#STRETCH_LITE_VERSION = 2017-11-29
+STRETCH_LITE_VERSION = 2018-04-18
+STRETCH_LITE_RELEASE_DATE = 2018-04-19
+STRETCH_LITE_SYMLINK = stretchLite.img
+STRETCH_LITE_FILE    = $(STRETCH_LITE_VERSION)-raspbian-stretch-lite.zip
+STRETCH_LITE_IMAGE   = $(STRETCH_LITE_VERSION)-raspbian-stretch-lite.img
+STRETCH_LITE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_LITE_RELEASE_DATE)/$(STRETCH_LITE_FILE)
+
+#--- Buster
+BUSTER_VERSION = 2019-06-20
+BUSTER_RELEASE_DATE = 2019-06-24
+BUSTER_SYMLINK = buster.img
+BUSTER_FILE    = $(BUSTER_VERSION)-raspbian-buster.zip
+BUSTER_IMAGE   = $(BUSTER_VERSION)-raspbian-buster.img
+BUSTER_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
+
+#--- Buster_lite
+BUSTER_LITE_VERSION = 2019-06-20
+BUSTER_LITE_RELEASE_DATE = 2019-06-24
+BUSTER_LITE_SYMLINK = busterLite.img
+BUSTER_LITE_FILE    = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.zip
+BUSTER_LITE_IMAGE   = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.img
+BUSTER_LITE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
+
 
 #--- This section is for OctoPi (http://octoprint.org/download/)
 OCTOPI_SYMLINK = octopi.img
@@ -42,7 +71,11 @@ help:
 	@echo ""
 	@echo "#--- X => the disk number you see above"
 	@echo "make jessie DISK=X"
+	@echo "make buster DISK=X"
 	@echo "make stretch DISK=X"
+	@echo ""
+	@echo "make buster_lite DISK=X"
+	@echo "make stretch_lite DISK=X"
 	@echo "make octopi DISK=X"
 	@echo ""
 	@echo "make $(STRETCH_FILE) # download file"
@@ -115,6 +148,65 @@ $(STRETCH_SYMLINK): $(STRETCH_IMAGE)
 ddStretch: diskSet unmountDisk
 	$(CAT_COMMAND) $(STRETCH_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
+#===================================
+# STRETCH_LITE
+#===================================
+$(STRETCH_LITE_FILE):
+	wget $(STRETCH_LITE_URL)
+
+$(STRETCH_LITE_IMAGE): $(STRETCH_LITE_FILE)
+	@echo "* Extracting $(STRETCH_LITE_IMAGE) from $(STRETCH_LITE_FILE)"
+	unzip -o $(STRETCH_LITE_FILE)
+	@touch $(STRETCH_LITE_IMAGE)
+	
+$(STRETCH_LITE_SYMLINK): $(STRETCH_LITE_IMAGE)
+	ln -sf $(STRETCH_LITE_IMAGE) $(STRETCH_LITE_SYMLINK)
+
+ddStretchLite: diskSet unmountDisk
+	$(CAT_COMMAND) $(STRETCH_LITE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+
+#===================================
+# BUSTER
+#===================================
+$(BUSTER_FILE):
+	echo $(BUSTER_FILE)
+	wget $(BUSTER_URL)
+
+$(BUSTER_IMAGE): $(BUSTER_FILE)
+	echo $(BUSTER_IMAGE)
+	ls -la $(BUSTER_IMAGE) || true
+	@echo "* Extracting $(BUSTER_IMAGE) from $(BUSTER_FILE)"
+	unzip -o $(BUSTER_FILE)
+	@touch $(BUSTER_IMAGE)
+	
+$(BUSTER_SYMLINK): $(BUSTER_IMAGE)
+	ln -sf $(BUSTER_IMAGE) $(BUSTER_SYMLINK)
+
+ddBuster: diskSet unmountDisk
+	echo "dd $(BUSTER_SYMLINK) to disk$(DISK)"
+	$(CAT_COMMAND) $(BUSTER_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+
+#===================================
+# BUSTER_LITE
+#===================================
+$(BUSTER_LITE_FILE):
+	echo $(BUSTER_LITE_FILE)
+	wget $(BUSTER_LITE_URL)
+
+$(BUSTER_LITE_IMAGE): $(BUSTER_LITE_FILE)
+	echo $(BUSTER_LITE_IMAGE)
+	ls -la $(BUSTER_LITE_IMAGE) || true
+	@echo "* Extracting $(BUSTER_LITE_IMAGE) from $(BUSTER_LITE_FILE)"
+	unzip -o $(BUSTER_LITE_FILE)
+	@touch $(BUSTER_LITE_IMAGE)
+	
+$(BUSTER_LITE_SYMLINK): $(BUSTER_LITE_IMAGE)
+	ln -sf $(BUSTER_LITE_IMAGE) $(BUSTER_LITE_SYMLINK)
+
+ddBusterLite: diskSet unmountDisk
+	echo "dd $(BUSTER_LITE_SYMLINK) to disk$(DISK)"
+	$(CAT_COMMAND) $(BUSTER_LITE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+
 
 #===================================
 # JESSIE
@@ -140,6 +232,12 @@ ddJessie: diskSet unmountDisk
 #===================================
 
 stretch: $(STRETCH_SYMLINK) ddStretch copyFiles
+
+stretch_lite: $(STRETCH_LITE_SYMLINK) ddStretchLite copyFiles
+
+buster: $(BUSTER_SYMLINK) ddBuster copyFiles
+
+buster_lite: $(BUSTER_LITE_SYMLINK) ddBusterLite copyFiles
 
 jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 

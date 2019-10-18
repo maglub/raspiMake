@@ -1,4 +1,4 @@
-#--- http://downloads.raspberrypi.org/raspbian_lite/images/
+#--- https://downloads.raspberrypi.org/raspbian_lite/images/
 
 #--- 2017-07-05 is the last release of jessie
 JESSIE_VERSION = 2017-07-05
@@ -6,7 +6,7 @@ JESSIE_RELEASE_DATE = $(JESSIE_VERSION)
 JESSIE_SYMLINK = jessie.img
 JESSIE_FILE    = $(JESSIE_VERSION)-raspbian-jessie-lite.zip
 JESSIE_IMAGE   = $(JESSIE_VERSION)-raspbian-jessie-lite.img
-JESSIE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(JESSIE_RELEASE_DATE)/$(JESSIE_FILE)
+JESSIE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(JESSIE_RELEASE_DATE)/$(JESSIE_FILE)
 
 #--- This section has to be updated with new releases of stretch
 #--- Sadly, the release date is not always the same date as the release version
@@ -17,7 +17,7 @@ STRETCH_RELEASE_DATE = 2018-04-19
 STRETCH_SYMLINK = stretch.img
 STRETCH_FILE    = $(STRETCH_VERSION)-raspbian-stretch.zip
 STRETCH_IMAGE   = $(STRETCH_VERSION)-raspbian-stretch.img
-STRETCH_URL     = http://downloads.raspberrypi.org/raspbian/images/raspbian-$(STRETCH_RELEASE_DATE)/$(STRETCH_FILE)
+STRETCH_URL     = https://downloads.raspberrypi.org/raspbian/images/raspbian-$(STRETCH_RELEASE_DATE)/$(STRETCH_FILE)
 
 #--- This section has to be updated with new releases of stretch
 #--- Sadly, the release date is not always the same date as the release version
@@ -27,26 +27,27 @@ STRETCH_LITE_RELEASE_DATE = 2018-04-19
 STRETCH_LITE_SYMLINK = stretchLite.img
 STRETCH_LITE_FILE    = $(STRETCH_LITE_VERSION)-raspbian-stretch-lite.zip
 STRETCH_LITE_IMAGE   = $(STRETCH_LITE_VERSION)-raspbian-stretch-lite.img
-STRETCH_LITE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_LITE_RELEASE_DATE)/$(STRETCH_LITE_FILE)
+STRETCH_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_LITE_RELEASE_DATE)/$(STRETCH_LITE_FILE)
 
 #--- Buster
-BUSTER_VERSION = 2019-06-20
-BUSTER_RELEASE_DATE = 2019-06-24
+BUSTER_VERSION = 2019-09-26
+BUSTER_RELEASE_DATE = 2019-06-30
 BUSTER_SYMLINK = buster.img
 BUSTER_FILE    = $(BUSTER_VERSION)-raspbian-buster.zip
 BUSTER_IMAGE   = $(BUSTER_VERSION)-raspbian-buster.img
-BUSTER_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
+BUSTER_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
 
 #--- Buster_lite
-BUSTER_LITE_VERSION = 2019-06-20
-BUSTER_LITE_RELEASE_DATE = 2019-06-24
+BUSTER_LITE_VERSION = 2019-09-26
+BUSTER_LITE_RELEASE_DATE = 2019-09-30
 BUSTER_LITE_SYMLINK = busterLite.img
 BUSTER_LITE_FILE    = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.zip
 BUSTER_LITE_IMAGE   = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.img
-BUSTER_LITE_URL     = http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
+BUSTER_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
+#BUSTER_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-09-30/2019-09-26-raspbian-buster-lite.zip
 
 
-#--- This section is for OctoPi (http://octoprint.org/download/)
+#--- This section is for OctoPi (https://octoprint.org/download/)
 OCTOPI_SYMLINK = octopi.img
 OCTOPI_FILE    = octopi.zip
 OCTOPI_IMAGE   = octopi-jessie-lite.img
@@ -62,7 +63,7 @@ help:
 	@echo ""
 	@echo "Usage:"
 	@echo ""
-	@echo "* Look for new images at: http://downloads.raspberrypi.org/raspbian_lite/images/"
+	@echo "* Look for new images at: https://downloads.raspberrypi.org/raspbian_lite/images/"
 	@echo "* If you want to enable ssh, touch ./ssh (if the file exist in this directory, it will be copied to /boot)"
 	@echo "* If you want to set up wpa_supplicant.conf, create one in this directory, and it will be copied to /boot"
 	@echo ""

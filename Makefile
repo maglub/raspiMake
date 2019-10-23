@@ -31,11 +31,11 @@ STRETCH_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/ra
 
 #--- Buster
 BUSTER_VERSION = 2019-09-26
-BUSTER_RELEASE_DATE = 2019-06-30
+BUSTER_RELEASE_DATE = 2019-09-30
 BUSTER_SYMLINK = buster.img
 BUSTER_FILE    = $(BUSTER_VERSION)-raspbian-buster.zip
 BUSTER_IMAGE   = $(BUSTER_VERSION)-raspbian-buster.img
-BUSTER_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
+BUSTER_URL     = https://downloads.raspberrypi.org/raspbian/images/raspbian-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
 
 #--- Buster_lite
 BUSTER_LITE_VERSION = 2019-09-26

@@ -30,21 +30,30 @@ STRETCH_LITE_IMAGE   = $(STRETCH_LITE_VERSION)-raspbian-stretch-lite.img
 STRETCH_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(STRETCH_LITE_RELEASE_DATE)/$(STRETCH_LITE_FILE)
 
 #--- Buster
-BUSTER_VERSION = 2019-09-26
-BUSTER_RELEASE_DATE = 2019-09-30
+BUSTER_VERSION = 2020-02-13
+BUSTER_RELEASE_DATE = 2020-02-14
 BUSTER_SYMLINK = buster.img
 BUSTER_FILE    = $(BUSTER_VERSION)-raspbian-buster.zip
 BUSTER_IMAGE   = $(BUSTER_VERSION)-raspbian-buster.img
 BUSTER_URL     = https://downloads.raspberrypi.org/raspbian/images/raspbian-$(BUSTER_RELEASE_DATE)/$(BUSTER_FILE)
 
 #--- Buster_lite
-BUSTER_LITE_VERSION = 2019-09-26
-BUSTER_LITE_RELEASE_DATE = 2019-09-30
+#--- 2020-08-20-raspios-buster-lite-armhf.img
+BUSTER_LITE_VERSION = 2020-08-20
+BUSTER_LITE_RELEASE_DATE = 2020-08-24
 BUSTER_LITE_SYMLINK = busterLite.img
-BUSTER_LITE_FILE    = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.zip
-BUSTER_LITE_IMAGE   = $(BUSTER_LITE_VERSION)-raspbian-buster-lite.img
-BUSTER_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
-#BUSTER_LITE_URL     = https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-09-30/2019-09-26-raspbian-buster-lite.zip
+BUSTER_LITE_FILE    = $(BUSTER_LITE_VERSION)-raspios-buster-armhf-lite.zip
+BUSTER_LITE_IMAGE   = $(BUSTER_LITE_VERSION)-raspios-buster-armhf-lite.img
+BUSTER_LITE_URL     = https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
+
+#--- Buster_lite64
+#--- 2020-08-20-raspios-buster-lite-armhf.img
+BUSTER_LITE_64_VERSION = 2020-08-20
+BUSTER_LITE_64_RELEASE_DATE = 2020-08-24
+BUSTER_LITE_64_SYMLINK = busterLite64.img
+BUSTER_LITE_64_FILE    = $(BUSTER_LITE_VERSION)-raspios-buster-arm64-lite.zip
+BUSTER_LITE_64_IMAGE   = $(BUSTER_LITE_VERSION)-raspios-buster-arm64-lite.img
+BUSTER_LITE_64_URL     = https://downloads.raspberrypi.org/raspios_lite_arm64/images/raspios_lite_arm64-$(BUSTER_LITE_RELEASE_DATE)/$(BUSTER_LITE_FILE)
 
 
 #--- This section is for OctoPi (https://octoprint.org/download/)
@@ -74,6 +83,8 @@ help:
 	@echo "make buster DISK=X # <=== current version"
 	@echo "make stretch DISK=X"
 	@echo "make jessie DISK=X"
+	@echo ""
+	@echo "make buster_lite_64 DISK=X # <=== current version"
 	@echo ""
 	@echo "make buster_lite DISK=X # <=== current version"
 	@echo "make stretch_lite DISK=X"
@@ -208,6 +219,27 @@ ddBusterLite: diskSet unmountDisk
 	echo "dd $(BUSTER_LITE_SYMLINK) to disk$(DISK)"
 	$(CAT_COMMAND) $(BUSTER_LITE_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
 
+#===================================
+# BUSTER_LITE_64
+#===================================
+$(BUSTER_LITE_64_FILE):
+	echo $(BUSTER_LITE_64_FILE)
+	wget $(BUSTER_LITE_64_URL)
+
+$(BUSTER_LITE_64_IMAGE): $(BUSTER_LITE_64_FILE)
+	echo $(BUSTER_LITE_64_IMAGE)
+	ls -la $(BUSTER_LITE_64_IMAGE) || true
+	@echo "* Extracting $(BUSTER_LITE_64_IMAGE) from $(BUSTER_LITE_64_FILE)"
+	unzip -o $(BUSTER_LITE_64_FILE)
+	@touch $(BUSTER_LITE_64_IMAGE)
+	
+$(BUSTER_LITE_64_SYMLINK): $(BUSTER_LITE_64_IMAGE)
+	ln -sf $(BUSTER_LITE_64_IMAGE) $(BUSTER_LITE_64_SYMLINK)
+
+ddBusterLite64: diskSet unmountDisk
+	echo "dd $(BUSTER_LITE_64_SYMLINK) to disk$(DISK)"
+	$(CAT_COMMAND) $(BUSTER_LITE_64_SYMLINK) | sudo dd of=/dev/rdisk$(DISK) bs=1m || true
+
 
 #===================================
 # JESSIE
@@ -239,6 +271,8 @@ stretch_lite: $(STRETCH_LITE_SYMLINK) ddStretchLite copyFiles
 buster: $(BUSTER_SYMLINK) ddBuster copyFiles
 
 buster_lite: $(BUSTER_LITE_SYMLINK) ddBusterLite copyFiles
+
+buster_lite_64: $(BUSTER_LITE_64_SYMLINK) ddBusterLite64 copyFiles
 
 jessie:  $(JESSIE_SYMLINK) ddJessie copyFiles
 
